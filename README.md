@@ -4,11 +4,9 @@ Connect a Psion running **EPOC ER5** to Wi-Fi through its serial port using a **
 
 **Initial release: 0.4.5** · **Maintainer: [ExPLIT](https://github.com/explit28)**
 
-| Psion Series 5mx | Wodem serial Wi-Fi adapter |
-|:---:|:---:|
-| [<img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Psion_Series_5MX_%282378635928%29.jpg" width="350" alt="An open Psion Series 5mx handheld running EPOC">](https://commons.wikimedia.org/wiki/File:Psion_Series_5MX_(2378635928).jpg) | [<img src="https://www.amiga-shop.net/images/product_images/popup_images/1304_0.png" width="350" alt="Wodem RS-232 to Wi-Fi adapter from Alinea Computer">](https://www.amiga-shop.net/Amiga-Hardware/Klassische-Amiga-Hardware/Wodem-WLAN-fuer-jeden-Amiga::1304.html) |
+![Psion 5mx Pro connected to the Wodem through the serial cable and adapters](docs/images/Psion5mxPro_WodemSLIP_connected.jpg)
 
-*Hardware illustrations: Psion photo by Blake Patterson, [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Psion_Series_5MX_(2378635928).jpg), displayed without image edits. Wodem product image linked from Alinea Computer's Amiga Shop; rights remain with its owner.*
+*The working hardware setup. The blue RS-232 tester shown in the photo is optional and is not required for the connection.*
 
 ## What it does
 
@@ -39,7 +37,7 @@ Configure the Wodem's Wi-Fi settings over Telnet, either from a **Linux machine*
 
 ## Installation
 
-Use **`WodemSLIP-0.4.5.sis`** for installation. See [Releases](https://github.com/explit28/Psion-WodemSLIP/releases) for available downloads, or [build from source](#building-from-source).
+**[Download WodemSLIP-0.4.5.sis](https://github.com/explit28/Psion-WodemSLIP/releases/download/0.4.5/WodemSLIP-0.4.5.sis)** from the [0.4.5 release](https://github.com/explit28/Psion-WodemSLIP/releases/tag/0.4.5), or [build from source](#building-from-source).
 
 1. Back up `C:\System\Libs\SLIP.NIF`, any existing WodemSLIP applet files and `C:\System\Data\TCPIP.INI`.
 2. Disconnect the network and close Internet applications and the Control panel.
@@ -63,6 +61,10 @@ Create a profile named **Wodem SLIP**, with these settings:
 | Get IP address from server | Off |
 | Local IP address | `192.168.240.2` |
 | Automatic DNS | Off; enter the DNS server for your LAN |
+
+![Static IP and DNS fields in the Psion Internet service profile](docs/images/Psion5mxPro_WodemSLIP_Setup.jpg)
+
+*Profile address settings: the Psion uses `192.168.240.2`. The DNS address shown is for this particular LAN; use the DNS server for your own network.*
 
 **The active SLIP addresses come from `C:\System\Data\TCPIP.INI`. Entering an address in the profile alone is insufficient.** The supplied configuration includes both `[slip]` and `[slip::ecuart]` sections.
 
@@ -146,6 +148,10 @@ reset
 
    **[CERN — The World Wide Web project](http://info.cern.ch/hypertext/WWW/TheProject.html)**
 
+![Opera displaying a web page on the Psion 5mx Pro](docs/images/Psion5mxPro_WodemSLIP_Online.jpg)
+
+*Opera displaying a web page on the Psion.*
+
 For Wodem management, use a **TCP/IP Telnet client** such as Mocha Telnet with host **`192.168.240.1`** and port **`7777`**. At the firmware prompt, `show` displays status and configuration. A raw serial terminal is a different connection type and cannot be used simultaneously with SLIP.
 
 Successful networking does not make a historical Psion browser compatible with modern TLS, JavaScript or large websites. Start with simple HTTP pages. For connection problems, see [Troubleshooting](docs/TROUBLESHOOTING.md).
@@ -173,7 +179,7 @@ Output: **`dist/WodemSLIP-0.4.5.sis`**.
 
 ## Credits and license
 
-Project by **ExPLIT** — GitHub: **[explit28](https://github.com/explit28)**.
+Project by **ExPLIT** — GitHub: **[explit28](https://github.com/explit28)**. Setup, configuration and browser photographs provided by ExPLIT.
 
 Thanks to Alinea Computer for the Wodem hardware, martin-ger for ESP SLIP Router, and the authors of the EPOC SDK and build tools.
 
