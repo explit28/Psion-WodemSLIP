@@ -1,64 +1,103 @@
-# Wodem SLIP for Psion
+# Psion-WodemSLIP
 
-A repaired serial SLIP driver and a native Control panel entry for a Psion 5mx Pro running EPOC ER5, used with an ESP8266-based Wodem.
+Connect a Psion running **EPOC ER5** to Wi-Fi through its serial port using a **Wodem** adapter.
 
-The project provides a native `.sis` installer, a normal selectable Internet profile, and the static TCP/IP configuration required by the SLIP driver. It does not use a launcher EXE to rewrite the connection database.
+**Initial release: 0.4.5** · **Maintainer: [ExPLIT](https://github.com/explit28)**
 
-## Status
+| Psion Series 5mx | Wodem serial Wi-Fi adapter |
+|:---:|:---:|
+| [<img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Psion_Series_5MX_%282378635928%29.jpg" width="350" alt="An open Psion Series 5mx handheld running EPOC">](https://commons.wikimedia.org/wiki/File:Psion_Series_5MX_(2378635928).jpg) | [<img src="https://www.amiga-shop.net/images/product_images/popup_images/1304_0.png" width="350" alt="Wodem RS-232 to Wi-Fi adapter from Alinea Computer">](https://www.amiga-shop.net/Amiga-Hardware/Klassische-Amiga-Hardware/Wodem-WLAN-fuer-jeden-Amiga::1304.html) |
 
-**0.4.5 adds the missing Control panel icon; driver unchanged from 0.4.4.** The user confirmed 0.4.3 works with CERN and other tested pages; only neverssl.com failed. This version removes active diagnostics from that exact driver while preserving its functional networking instructions and binary layout.
+*Hardware illustrations: Psion photo by Blake Patterson, [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Psion_Series_5MX_(2378635928).jpg), displayed without image edits. Wodem product image linked from Alinea Computer's Amiga Shop; rights remain with its owner.*
 
-The three diagnostic entry points (`ram_init`, `logger`, `ram_dump`) return immediately. Object allocation is restored from 35,104 to 2,244 bytes. No RAM trace is recorded and no diagnostic files are created, overwritten or appended. Existing BIN files are left untouched. Diagnostic bodies, call wrappers and native imports remain inert in the image to avoid moving the working networking code. Only three entry instructions, the allocation-size literal and the code-checksum word differ from the user-tested 0.4.3 image.
+## What it does
 
-Queue-based send flow control and serial framing/parity/overrun recovery remain byte-identical to 0.4.3. No artificial delay is added. Tests cover the exact binary difference, no-op entries, unused-buffer guards, send/receive/error paths, Stop/destruction, and selected actual device TCPIP boundary routines. This is not a complete device/kernel/UART simulation; the final no-diagnostic SIS still needs a Psion comparison test.
+WodemSLIP provides a serial SLIP network driver, a native System Control panel applet and a `.sis` installer. The Psion sends IP packets over RS-232 to the Wodem, which connects to your wireless network. Internet applications use the resulting connection through EPOC's TCP/IP stack.
 
-0.4.5 installs `C:\System\Controls\WodemSLIP.aif`, which was missing and caused the question-mark placeholder. It preserves the original EPOC Internet icon (computer, globe and handheld), adapting its UID and caption to WodemSLIP. The original icon transparency mask is retained. No driver or connection-setting changes accompany this icon fix. The icon display still needs a device check.
+- Native **WodemSLIP** Control panel entry with the EPOC Internet icon.
+- Selectable SLIP Internet connection profiles.
+- Static IP, gateway and DNS configuration.
+- Serial transmit flow control and receive-error recovery.
+- No active diagnostic logging or growing BIN files.
 
-## Install on the Psion
+The hardware setup used for development is a **Psion 5mx Pro with 32 MB RAM running EPOC ER5**. Other models and ROM versions are not yet verified.
 
-1. Back up existing `SLIP.NIF`, WodemSLIP applet files and `C:\System\Data\TCPIP.INI`.
-2. Transfer `WodemSLIP-0.4.5.sis` to the Psion, close Internet programs and open the SIS in the System file manager.
-3. Answer the configuration question. **Yes replaces `TCPIP.INI`; No preserves it.** Choose No if you already have working settings or other custom interfaces.
-4. Close programs and perform a normal soft reset. This is not a hard reset.
-5. Create a profile under **Control panel → WodemSLIP**, as described in the [installation guide](docs/INSTALL.md).
+## Hardware and useful links
 
-A short installed guide is available at `C:\System\WodemSLIP\QUICKSTART.TXT`.
+You need a Psion serial cable, suitable adapters for the Wodem's RS-232 connector, a powered Wodem and a way to transfer the installer to the Psion. A null-modem adapter may be required depending on the cable wiring. The Wodem's WLAN connection must be configured separately.
 
-## Default network configuration
+- **[Wodem product page — Alinea Computer / Amiga Shop](https://www.amiga-shop.net/Amiga-Hardware/Klassische-Amiga-Hardware/Wodem-WLAN-fuer-jeden-Amiga::1304.html)** — hardware, product photographs and power options.
+- **[Wodem hardware design](https://gitlab.com/rwahler1/kicad/Amiga_Wodem)** — KiCad project.
+- **[ESP SLIP Router firmware](https://github.com/martin-ger/esp_slip_router)** — firmware used by the Wodem.
+- **[Wodem enclosure](https://www.thingiverse.com/thing:6257091)** — 3D-printable case.
+- **[Psion Series 5 / 5mx overview](https://en.wikipedia.org/wiki/Psion_Series_5)** and **[Psion photo gallery](https://commons.wikimedia.org/wiki/Category:Psion_Series_5)**.
 
-| Setting | Default |
+## Installation
+
+Use **`WodemSLIP-0.4.5.sis`** for installation. See [Releases](https://github.com/explit28/Psion-WodemSLIP/releases) for available downloads, or [build from source](#building-from-source).
+
+1. Back up `C:\System\Libs\SLIP.NIF`, any existing WodemSLIP applet files and `C:\System\Data\TCPIP.INI`.
+2. Disconnect the network and close Internet applications and the Control panel.
+3. Transfer the SIS to the Psion and open it in the System file manager.
+4. At the TCP/IP settings question, choose **Yes** to install the supplied defaults, or **No** to preserve an existing working `TCPIP.INI`. A template is installed in either case.
+5. Close programs and perform a **normal soft reset** to unload any previously loaded driver.
+6. Create a connection under **Control panel → WodemSLIP → New → Standard settings**.
+
+Do not perform a hard reset. The installed quick-start guide is at `C:\System\WodemSLIP\QUICKSTART.TXT`. See the [installation guide](docs/INSTALL.md) for details.
+
+## Connection settings
+
+Create a profile named **Wodem SLIP**, with these settings:
+
+| Profile setting | Value |
 |---|---|
-| Psion SLIP address | `192.168.240.2` |
-| Wodem peer / default gateway | `192.168.240.1` |
+| Connection type | Direct |
+| Manual login | Off |
+| Login script / display window | Off |
+| PPP extensions / callback | Off |
+| Get IP address from server | Off |
+| Local IP address | `192.168.240.2` |
+| Automatic DNS | Off; enter the DNS server for your LAN |
+
+**The active SLIP addresses come from `C:\System\Data\TCPIP.INI`. Entering an address in the profile alone is insufficient.** The supplied configuration includes both `[slip]` and `[slip::ecuart]` sections.
+
+| Network setting | Supplied default |
+|---|---|
+| Psion address | `192.168.240.2` |
+| Wodem peer and default gateway | `192.168.240.1` |
 | Netmask | `255.255.255.0` |
-| DNS | `192.168.178.1` — change for your LAN |
+| DNS server | `192.168.178.1` — change this for your LAN |
 | Wodem management console | TCP port `7777` |
-| Serial settings | `115200`, 8 data bits, no parity, 1 stop bit; match the Wodem |
 
-**The active SLIP address comes from `TCPIP.INI`. Setting an address in the Internet profile alone is insufficient for this driver.** The file contains both `[slip]` and `[slip::ecuart]` sections. The original loopback and resolver defaults are retained.
+The DNS default is from a FritzBox network; it is not universal. Change `ns1` in **both** SLIP sections if your network uses another DNS server. See [the configuration file](config/TCPIP.INI).
 
-Flow control and the need for a null-modem adapter depend on the actual firmware and wiring. Keep a verified working setup. RTS/CTS requires support and connected handshake lines; do not enable XON/XOFF for this binary SLIP setup.
+### Serial connection
 
-## Verify the connection
+Under **Control panel → Modems**, select the direct cable entry:
 
-Disable the Psion desktop/remote link before starting SLIP. Connect using the Wodem SLIP profile, then inspect the active interface with a tool such as NetUtils:
+- Match the Wodem's baudrate; the development setup uses **115200 baud, 8 data bits, no parity, 1 stop bit**.
+- Match hardware flow control to the actual firmware and connected handshake lines. RTS/CTS requires support at both ends.
+- Keep **XON/XOFF off** for this binary SLIP connection.
+- Disable terminal detection if the cable does not supply the required DSR/DTR signals.
 
-- Address should be `192.168.240.2`, not `0.0.0.0`.
-- Peer/default gateway should be `192.168.240.1`.
-- Ping `192.168.240.1` to check the local SLIP path.
-- Use a **TCP/IP Telnet client** with host `192.168.240.1` and port `7777` for the Wodem console. A raw serial terminal cannot replace that client.
+**Switch off the Psion desktop/remote link before starting SLIP.** Close raw serial terminal programs too: they compete for the same serial port.
 
-The firmware's `show` command displays its configuration and status. If the Wodem responds but the LAN does not, check its WLAN association and the Psion's default route. [Troubleshooting](docs/TROUBLESHOOTING.md) separates these cases.
+## Test the connection
 
-## Files and removal
+1. Connect using the **Wodem SLIP** profile.
+2. In an IP utility such as NetUtils, verify that the active SLIP address is `192.168.240.2`, not `0.0.0.0`.
+3. Ping `192.168.240.1` to test the local connection to the Wodem.
+4. Open this small HTTP page in the Psion browser:
 
-The installer copies the repaired driver, the new applet, the short guide and a configuration template. Installing the active `TCPIP.INI` is optional. It does not install Ethernet/IrLAN drivers or modify unrelated connection profiles.
+   **[CERN — The World Wide Web project](http://info.cern.ch/hypertext/WWW/TheProject.html)**
 
-Remove **Wodem SLIP** through **Control panel → Add/remove**. Profiles created in the connection database remain. A `TCPIP.INI` installed by this package is also removed; a configuration skipped during installation is preserved. Previous manually installed files are not automatically restored. Back up custom changes before removal. See [uninstallation](docs/INSTALL.md#uninstall-and-restore).
+For Wodem management, use a **TCP/IP Telnet client** such as Mocha Telnet with host **`192.168.240.1`** and port **`7777`**. At the firmware prompt, `show` displays status and configuration. A raw serial terminal is a different connection type and cannot be used simultaneously with SLIP.
 
-## Source and rebuilding
+Successful networking does not make a historical Psion browser compatible with modern TLS, JavaScript or large websites. Start with simple HTTP pages. For connection problems, see [Troubleshooting](docs/TROUBLESHOOTING.md).
 
-This repository contains the repair/build scripts, configuration, package description, tests and documentation. SDK binaries are local inputs and are not included in the public source archive.
+## Building from source
+
+This repository contains scripts, configuration, tests and documentation. The build requires the exact EPOC ER5 SDK inputs and the external `xmakesis.pl` tool described in [Development](docs/DEVELOPMENT.md). SDK binaries are not bundled in the source repository.
 
 ```bash
 python3 -m venv .venv
@@ -67,14 +106,20 @@ python -m pip install -r requirements.txt
 python build.py --sdk-root /path/to/Cpp --makesis /path/to/xmakesis.pl --test
 ```
 
-The SIS is written to `dist/WodemSLIP-0.4.5.sis`. Exact input hashes are enforced. See [development](docs/DEVELOPMENT.md) for the SDK/tool requirements and diagnostic builds.
+Output: **`dist/WodemSLIP-0.4.5.sis`**.
 
 ## Documentation
 
-- [Installation and profile setup](docs/INSTALL.md)
+- [Installation, profile setup and removal](docs/INSTALL.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Driver and configuration design](docs/DESIGN.md)
-- [Build and verification](docs/DEVELOPMENT.md)
-- [Third-party components and distribution scope](THIRD_PARTY.md)
+- [Build requirements and verification](docs/DEVELOPMENT.md)
+- [Third-party components](THIRD_PARTY.md)
 
-Original project scripts and documentation use the [MIT license](LICENSE). That license does not cover Symbian SDK binaries/resources or external build tools. The source archive excludes those binaries; public redistribution rights for a compiled SIS are not established by this project.
+## Credits and license
+
+Project by **ExPLIT** — GitHub: **[explit28](https://github.com/explit28)**.
+
+Thanks to Alinea Computer for the Wodem hardware, martin-ger for ESP SLIP Router, and the authors of the EPOC SDK and build tools.
+
+Original project scripts and documentation are covered by the [MIT license](LICENSE). Symbian SDK-derived binaries, resources, icons and third-party photographs retain their respective terms. See [THIRD_PARTY.md](THIRD_PARTY.md) for scope and redistribution information.
