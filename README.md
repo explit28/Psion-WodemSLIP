@@ -143,6 +143,11 @@ reset
 
 1. Connect using the **Wodem SLIP** profile.
 2. In an IP utility such as NetUtils, verify that the active SLIP address is `192.168.240.2`, not `0.0.0.0`.
+
+   ![NetUtils ifconfig output for the configured SLIP interface](docs/images/Psion5mxPro_WodemSLIP_Ifconfig.jpg)
+
+   *The interface output shows the configured Psion address `192.168.240.2`, gateway `192.168.240.1` and the DNS server for this LAN. The final log lines show a later disconnection, after which the address returns to `0.0.0.0`.*
+
 3. Ping `192.168.240.1` to test the local connection to the Wodem.
 4. Open this small HTTP page in the Psion browser:
 
