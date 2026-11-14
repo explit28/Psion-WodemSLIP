@@ -1,0 +1,46 @@
+Wodem SLIP 0.4.5 - no active diagnostics - Psion 5mx Pro / EPOC ER5
+
+1. Close Internet applications before installation. Back up existing
+   SLIP.NIF, WodemSLIP applet files and C:\System\Data\TCPIP.INI.
+2. Open WodemSLIP-0.4.5.sis on the Psion.
+3. At the TCP/IP configuration question:
+   YES replaces C:\System\Data\TCPIP.INI with the supplied defaults.
+   NO preserves your existing file. A template is installed at
+   C:\System\WodemSLIP\TCPIP-template.INI.
+4. Close programs and perform a normal soft reset, NOT a hard reset.
+5. Control panel > WodemSLIP > New > Standard settings:
+   Name: Wodem SLIP; connection type: Direct.
+   Manual login, login script, display window, PPP extensions and callback: off.
+   Local IP: 192.168.240.2, automatic IP: off.
+   The driver's ACTIVE addresses come from TCPIP.INI, not the profile alone.
+6. Control panel > Modems > direct cable entry:
+   Match the Wodem rate (tested setup: 115200), 8 data bits, no parity, 1 stop bit.
+   Flow control must match firmware/wiring. XON/XOFF: off.
+   Disable terminal detection if the cable does not provide DSR/DTR.
+7. Disable desktop/remote link and close raw serial terminal programs.
+8. Connect using Wodem SLIP. Check the active address is 192.168.240.2,
+   NOT 0.0.0.0. Gateway/peer: 192.168.240.1. Netmask: 255.255.255.0.
+9. Ping 192.168.240.1. For the Wodem console use a TCP/IP Telnet client:
+   host 192.168.240.1, port 7777. At CMD>, 'show' reads status/configuration.
+
+DNS default 192.168.178.1 is for the tested FritzBox LAN. Change it in
+TCPIP.INI for another network. Configure Wodem WLAN separately.
+This icon update retains the exact 0.4.4 driver, with 0.4.3 send flow
+control and receive-error recovery. WodemSLIP.aif adds the original EPOC
+Internet icon and a matching WodemSLIP caption.
+There is no RAM trace and no diagnostic file output. Existing BIN files
+are not removed. No artificial delay is added.
+
+FOR AN EXISTING WORKING SETUP: choose NO for TCPIP.INI replacement and
+keep the existing profile/cable/rate. After a normal soft reset, connect,
+Ping 192.168.240.1, then open the same known-working HTTP page:
+http://info.cern.ch/hypertext/WWW/TheProject.html
+No diagnostic file needs to be copied after the test.
+
+REMOVE: disconnect, close Internet programs, back up customized settings,
+then Control panel > Add/remove > Wodem SLIP. A TCPIP.INI installed by the
+package is removed; a skipped existing file is preserved. Previous manual
+files are not automatically restored. Connection profiles remain in CommDB.
+
+The no-diagnostic SIS needs a comparison; 0.4.3 was user-tested.
+Full English documentation is in the source archive.

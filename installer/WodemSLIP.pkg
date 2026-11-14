@@ -1,0 +1,12 @@
+; Native non-Unicode EPOC ER5 SIS. Experimental package UID.
+&EN
+#{"Wodem SLIP"},(0x0F574454),0,4,5
+"installer/INTRO.TXT"-"",FT,TC
+"payload/SLIP.NIF"-"C:\System\Libs\SLIP.NIF"
+"payload/WodemSLIP.ctl"-"C:\System\Controls\WodemSLIP.ctl"
+"payload/WodemSLIP.rsc"-"C:\System\Controls\WodemSLIP.rsc"
+"payload/WodemSLIP.aif"-"C:\System\Controls\WodemSLIP.aif"
+"payload/QUICKSTART.TXT"-"C:\System\WodemSLIP\QUICKSTART.TXT"
+"payload/TCPIP.INI"-"C:\System\WodemSLIP\TCPIP-template.INI"
+"installer/CONFIG.TXT"-"",FT,TS
+"payload/TCPIP.INI"-"C:\System\Data\TCPIP.INI"

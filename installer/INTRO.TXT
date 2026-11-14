@@ -1,0 +1,20 @@
+Wodem SLIP 0.4.5 - no active diagnostics - Psion 5mx Pro / EPOC ER5
+
+Disconnect SLIP and close Internet programs and the Control panel.
+Back up the working SLIP.NIF and C:\System\Data\TCPIP.INI.
+
+This icon update adds the missing WodemSLIP.aif (original EPOC Internet
+icon: computer, globe and handheld) with the matching applet UID/caption.
+The driver is byte-identical to 0.4.4.
+
+This build retains the working 0.4.3 send flow control and serial
+receive-error recovery. Only the diagnostic entry points are disabled
+and the object allocation is restored to its original size.
+There is no RAM trace, no diagnostic file output and no artificial delay.
+Existing diagnostic BIN files are left untouched.
+
+Keep the existing profile, cable and baudrate. At the TCP/IP settings
+question choose NO to preserve the working TCPIP.INI. After installation,
+close programs and perform a normal soft reset to unload the old driver.
+Test the same CERN HTTP page used successfully with 0.4.3.
+The no-diagnostic derivative still needs a comparison on the Psion.

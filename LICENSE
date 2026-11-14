@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 ExPLIT
+Copyright (c) 2026 explit28
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+This license covers project-authored material only. It does not cover
+Symbian SDK binaries/resources or external build tools. See THIRD_PARTY.md.

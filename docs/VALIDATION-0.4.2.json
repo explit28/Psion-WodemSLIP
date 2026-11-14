@@ -1,0 +1,123 @@
+{
+  "validation.json": {
+    "version": "0.4.2-diagnostic-preview",
+    "hardware_status": "Derived from v3 repair generator with bounded RAM diagnostics and framing recovery. Device test pending; browser regression not yet reproduced in the model.",
+    "trace_enabled": true,
+    "trace_mode": "bounded RAM ring; flush only on Stop/destruction",
+    "max_dump_bytes": 32800,
+    "changes": {
+      "basis_sha256": "10e42f8a255643f2a8a377ed2d2607fb0d00fb2d73016c8b092885c7accd1dce",
+      "mode": "Bounded RAM diagnostics and serial error recovery; no ongoing file I/O",
+      "hardware_status": "Device test pending"
+    },
+    "driver_sha256": "3f8c4fbaec1fdb32a7b234c20b0ecd9879e3515af3f5318dc55b671c6fafc517",
+    "driver_size": 8544,
+    "control_panel": {
+      "status": "experimental; device runtime and network not tested",
+      "uid3": "0xf574453",
+      "resource_base": "0x57445000",
+      "protocol_resource": {
+        "id": 37,
+        "value": "slip"
+      },
+      "stock_ifname_field_offset": "0x1a0",
+      "resource_literal_file_offsets": [
+        "0x974",
+        "0x978",
+        "0x97c",
+        "0x980",
+        "0x984",
+        "0x9a0",
+        "0xd10",
+        "0xd14",
+        "0xedc",
+        "0xee8",
+        "0xf84",
+        "0x12bc",
+        "0x155c",
+        "0x1560",
+        "0x1564",
+        "0x19a4",
+        "0x1ae8",
+        "0x1b94",
+        "0x1b98",
+        "0x1cd8",
+        "0x1cdc",
+        "0x1d50",
+        "0x1d84",
+        "0x1ebc",
+        "0x1efc",
+        "0x2054",
+        "0x2064",
+        "0x2330",
+        "0x2714",
+        "0x2718",
+        "0x2758",
+        "0x2878",
+        "0x2db8",
+        "0x2dc0"
+      ],
+      "resource_internal_ids_updated": 16,
+      "sql": "SELECT Name,Id FROM DialOutService WHERE hidden=0 AND IfName='slip'",
+      "query_pointer_file_offset": "0x176c",
+      "original_ctl_sha256": "c718a49a5796bd0b06148e5680db80cb43a7435460723d5fd16e083c7af9a06c",
+      "original_rsc_sha256": "f62a078a9eed8235a5b705ae6e865e27c5f91d9b3802f73e249df8940f8aea7d",
+      "output_ctl_sha256": "6ae16dee299ff29778fb71764502b4cf53d1417cab0bfa8374a23980fa35f1c0",
+      "output_rsc_sha256": "e8772e0248a2619c277b2331e004785e013c5a1338d1d7cf6824f2b4cb22f170",
+      "checks": [
+        "original UID CRC",
+        "original code checksum",
+        "output UID CRC",
+        "output code checksum",
+        "resource index and SLIP resource",
+        "unique control UID and resource namespace",
+        "unchanged export and import section contents",
+        "unchanged relocation sites",
+        "rebased query pointer simulation"
+      ]
+    },
+    "sis_sha256": "302c6a602d6ea7b8e454f4beef58a60e162deb8abf9775ee6404950d52f99958",
+    "sis_files_verified": 6,
+    "skip_config_files_verified": 5,
+    "tests_requested": true,
+    "installer_checks": [
+      "ER5 UIDs",
+      "UID CRC",
+      "whole SIS CRC",
+      "package version",
+      "English language",
+      "installation order",
+      "optional config skip",
+      "all destinations and payload bytes"
+    ]
+  },
+  "encoder-checks.json": {
+    "baseline_v2_fault_reproduced": {
+      "pc": "0x6ac",
+      "address": "0x0"
+    },
+    "baseline_v2_receive_state_loss_reproduced": true,
+    "complete_tx_loopback_cases_passed": 116,
+    "additional_receive_cases_passed": 90,
+    "coverage": "Both load bases; Send/encoder and async writes; sizes 0..2048; C0/DB escaping; fragmented mbufs; multiple queued packets; flow wakeup; byte-for-byte receive loopback; split ESC; exact full receive buffers; read rearming; simultaneous receive with pending writes; idle and ownership checks; stack restoration",
+    "limits": "Native descriptor, mbuf, queue, protocol callbacks and serial APIs modeled from SDK contracts. Logger is bypassed here and executed separately in test_ram_diagnostics.py. Does not emulate full Psion kernel, real serial hardware/driver or TCP/IP implementation."
+  },
+  "repair-checks.json": {
+    "factory_initialization_cases_passed": 8,
+    "destructor_cases_passed": 4,
+    "handshake_cases_passed": 2048,
+    "verified": "CleanupStack-protected initialization; original constructor called with factory; MComm read/write priorities; return value and saved factory frame; cleanup of full/partial initialization; destructor flags and LR; DSR/DCD mask preserves all other low handshake bits",
+    "limits": "Native constructor, CleanupStack and MComm allocation/deletion APIs mocked. No hardware test or full Symbian Leave unwinding emulation."
+  },
+  "ram-diagnostic-checks.json": {
+    "receive_error_recovery_cases_passed": 36,
+    "data_and_reentrant_diagnostics_cases_passed": 12,
+    "ring_dump_reset_cases_passed": 10,
+    "file_failure_cases_passed": 8,
+    "stop_destructor_flush_cases_passed": 4,
+    "decoder_ring_cases_passed": 10,
+    "no_file_IO_during_data_path": true,
+    "max_dump_bytes": 32800,
+    "limits": "Actual ARM driver/logger and wrappers executed; native OS APIs, protocol callbacks and completion order modeled. No device, full EPOC kernel or physical UART/timing test."
+  }
+}

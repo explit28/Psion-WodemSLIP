@@ -1,0 +1,47 @@
+{
+  "version": "0.4.1-preview",
+  "hardware_status": "Exact user-tested v3 basis; one-instruction no-log patch and SIS still need a device test. The rearranged 0.4.0 driver was reported not working.",
+  "trace_enabled": false,
+  "minimal_patch": {
+    "basis": "Exact user-tested v3",
+    "input_sha256": "10e42f8a255643f2a8a377ed2d2607fb0d00fb2d73016c8b092885c7accd1dce",
+    "output_sha256": "b2d355a1f41bc50b56e7f7a80f1d11d59d13a61b5ebbb09fcf7983619f098815",
+    "size": 8120,
+    "logger_entry_rva": "0x1410",
+    "logger_entry_file_offset": "0x148c",
+    "patch": "PUSH {r4-r11,lr} -> MOV pc,lr",
+    "changed_byte_offsets": [
+      24,
+      25,
+      26,
+      27,
+      5260,
+      5261,
+      5262,
+      5263
+    ],
+    "allowed_modified_words": [
+      "0x18",
+      "0x148c"
+    ],
+    "layout_imports_exports_relocations_network_code": "Byte-identical to v3",
+    "logging": "File logger returns immediately; existing trace wrappers/imports/dead logger bytes retained; no log writes or file creation through logger",
+    "hardware_status": "Minimal no-log patch not yet device-tested"
+  },
+  "driver_sha256": "b2d355a1f41bc50b56e7f7a80f1d11d59d13a61b5ebbb09fcf7983619f098815",
+  "driver_size": 8120,
+  "sis_sha256": "da1f722a468bbf65d2f97711e4288429c272dda32ef746ffe703f2fce8811683",
+  "sis_files_verified": 6,
+  "skip_config_files_verified": 5,
+  "tests_requested": true,
+  "installer_checks": [
+    "ER5 UIDs",
+    "UID CRC",
+    "whole SIS CRC",
+    "package version",
+    "English language",
+    "installation order",
+    "optional config skip",
+    "all destinations and payload bytes"
+  ]
+}

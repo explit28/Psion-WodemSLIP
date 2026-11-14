@@ -1,0 +1,15 @@
+Install standard Wodem SLIP TCP/IP settings?
+
+YES installs C:\System\Data\TCPIP.INI and REPLACES an existing file.
+It configures Psion 192.168.240.2, peer/gateway 192.168.240.1,
+netmask 255.255.255.0 and DNS 192.168.178.1.
+
+Choose NO to preserve an existing or customized TCPIP.INI. The driver
+and control-panel entry are still installed. A template is available at
+C:\System\WodemSLIP\TCPIP-template.INI for merging the SLIP sections.
+
+If these default addresses are already your working configuration,
+YES installs the same network settings. Keep a backup first.
+
+Uninstall removes TCPIP.INI if this installer installed that file.
+It does not restore a previous manual copy or remove connection profiles.
