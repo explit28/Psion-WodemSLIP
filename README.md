@@ -18,13 +18,18 @@ WodemSLIP provides a serial SLIP network driver, a native System Control panel a
 - Selectable SLIP Internet connection profiles.
 - Static IP, gateway and DNS configuration.
 - Serial transmit flow control and receive-error recovery.
-- No active diagnostic logging or growing BIN files.
 
 The hardware setup used for development is a **Psion 5mx Pro with 32 MB RAM running EPOC ER5**. Other models and ROM versions are not yet verified.
 
 ## Hardware and useful links
 
-You need a Psion serial cable, suitable adapters for the Wodem's RS-232 connector, a powered Wodem and a way to transfer the installer to the Psion. A null-modem adapter may be required depending on the cable wiring. The Wodem's WLAN connection must be configured separately.
+Use the following cable chain for the tested setup:
+
+**Psion → Serial cable → Null-modem adapter → DB9-to-DB25 adapter → Wodem**
+
+The null-modem adapter provides the serial crossover; the DB9-to-DB25 adapter matches the connector sizes. Supply the Wodem with its required external power. You also need a way to transfer the installer to the Psion.
+
+Configure the Wodem's Wi-Fi settings over Telnet, either from a **Linux machine** or directly on the **Psion using Mocha Telnet**. See [Wodem configuration](#configure-the-wodem-over-telnet).
 
 - **[Wodem product page — Alinea Computer / Amiga Shop](https://www.amiga-shop.net/Amiga-Hardware/Klassische-Amiga-Hardware/Wodem-WLAN-fuer-jeden-Amiga::1304.html)** — hardware, product photographs and power options.
 - **[Wodem hardware design](https://gitlab.com/rwahler1/kicad/Amiga_Wodem)** — KiCad project.
@@ -81,6 +86,56 @@ Under **Control panel → Modems**, select the direct cable entry:
 - Disable terminal detection if the cable does not supply the required DSR/DTR signals.
 
 **Switch off the Psion desktop/remote link before starting SLIP.** Close raw serial terminal programs too: they compete for the same serial port.
+
+## Configure the Wodem over Telnet
+
+The Wodem's configuration console uses **TCP port 7777**. With the supplied SLIP addresses, the Wodem is **`192.168.240.1`** and the attached computer is **`192.168.240.2`**. Telnet runs over that IP connection; it is not a raw serial terminal session. Local access to the console does not require an Internet connection.
+
+### Option 1: from Linux
+
+Connect the Wodem to a Linux machine through a suitable **USB-to-RS-232 adapter** and matching serial adapters. Establish the local SLIP link, then open Telnet. The following example follows the [firmware's Linux setup](https://github.com/martin-ger/esp_slip_router#usage-as-sta), using `/dev/ttyUSB0` and 115200 baud. Substitute your device and the Wodem's configured baudrate.
+
+Run this in one terminal and leave it running:
+
+```bash
+sudo slattach -L -p slip -s 115200 /dev/ttyUSB0
+```
+
+In another terminal, configure the resulting interface and connect:
+
+```bash
+sudo ifconfig sl0 192.168.240.2 pointopoint 192.168.240.1 up mtu 1500
+telnet 192.168.240.1 7777
+```
+
+Use the actual SLIP interface name if it is not `sl0`. On Debian/Ubuntu, `slattach` and `ifconfig` are supplied by `net-tools`; a Telnet client must also be installed. This local configuration session does not require changing the Linux default route or DNS settings. After configuration, close Telnet and stop `slattach` with Ctrl+C before moving the Wodem back to the Psion cable chain. Firmware builds requiring hardware flow control may need different serial handling; see the firmware documentation.
+
+### Option 2: directly from the Psion
+
+Install WodemSLIP, configure the direct-cable profile and start the SLIP connection as described above. Keep the Psion desktop/remote link switched off. Then create a **TCP/IP connection in Mocha Telnet**:
+
+| Mocha Telnet setting | Value |
+|---|---|
+| Host | `192.168.240.1` |
+| Port | `7777` |
+| Terminal type | VT100 |
+| Local echo | Enable if your typing is not visible; disable if characters appear twice |
+
+The Wodem console can be reached over this local SLIP link before its Wi-Fi connection has been configured.
+
+### Set the Wi-Fi network
+
+At the Wodem's `CMD>` prompt, use the following firmware commands, replacing the placeholders with your network details:
+
+```text
+set ssid YOUR_WIFI_SSID
+set password YOUR_WIFI_PASSWORD
+set use_ap 0
+save
+reset
+```
+
+`set use_ap 0` selects station mode, so the Wodem joins your existing Wi-Fi network. For spaces or special characters, use the [escaping described in the firmware documentation](https://github.com/martin-ger/esp_slip_router#usage-as-sta). After the restart, reconnect and enter `show` to inspect the configuration and connection status. The `reset` command restarts the Wodem and interrupts the Telnet session.
 
 ## Test the connection
 
